@@ -1,0 +1,4 @@
+select p_i.USER_NUM, p_i.POINT, g_i.GRADE 
+from (select p1.USER_NUM, plu-nvl(mi, 0) as POINT from (select USER_NUM, sum(POINT) as plu from POINT_INFO where ETC='적립' group by USER_NUM) p1, (select USER_NUM, sum(POINT) as mi from POINT_INFO where ETC='사용' group by USER_NUM) p2 where p1.USER_NUM=p2.USER_NUM(+)) p_i, 
+(select SEQ, GPOINT_START, GRADE, nvl((select g1.GPOINT_START-1 from GRADE_INFO g1 where g1.seq=g2.SEQ+1), 99999) as GPOINT_END from GRADE_INFO g2) g_i 
+where p_i.point between g_i.GPOINT_START and g_i.GPOINT_END;

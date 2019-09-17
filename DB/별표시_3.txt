@@ -1,0 +1,5 @@
+
+--SM I TH
+select ename, substr(ename, 1,2)||
+lpad(substr(ename, -2,2), length(ename)-2, '*')
+from emp;

@@ -1,0 +1,45 @@
+drop table grade_info;
+drop table point_info;
+
+create table grade_info
+(
+seq number,
+gpoint_start number,
+grade varchar2(20)
+);
+insert into grade_info values(1,0,'member');
+insert into grade_info values(2,10000,'bronze');
+insert into grade_info values(3,20000,'silver');
+insert into grade_info values(4,30000,'gold');
+
+
+
+create table point_info(
+seq number,
+user_num number,
+point number,
+etc varchar2(200)
+);
+insert into point_info values(1,1,5000,'적립');
+insert into point_info values(2,1,5000,'적립');
+insert into point_info values(3,2,5000,'적립');
+insert into point_info values(4,1,5000,'적립');
+insert into point_info values(5,1,3000,'사용');
+insert into point_info values(5,1,3000,'사용');
+
+
+
+select grade
+from 
+(
+        select gpoint_start, decode(gpoint_end ,null, 999999, gpoint_end-1) as gpoint_end,  grade
+        from 
+        (select g.gpoint_start , g.grade
+                , (select gpoint_start from grade_info where seq = g.seq+1) as gpoint_end
+        from grade_info g
+        ) 
+) t
+where  (select sum(point) from point_info where user_num=1)  between gpoint_start and gpoint_end;
+
+  
+

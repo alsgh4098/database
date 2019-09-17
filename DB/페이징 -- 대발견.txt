@@ -1,0 +1,4 @@
+select e1.* 
+from emp e1 
+where (select count(*) from emp e2 where e2.sal>=e1.sal) between 2 and 5
+order by sal desc;

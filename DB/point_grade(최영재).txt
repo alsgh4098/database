@@ -1,0 +1,21 @@
+select p.user_num, p_point , grade
+from 
+(select user_num , sum(decode(etc,'적립',point,-point)) as p_point from point_info
+group by user_num) p , (select g.seq, g.gpoint_start , decode(ge.gpoint_end,null,'Infinity',ge.gpoint_end-1) as gpoint_end, g.grade
+from (select seq,g.gpoint_start,g.grade,
+(select gpoint_start from grade_info where seq=g.seq+1) as gpoint_end
+from grade_info g) ge, grade_info g
+where ge.seq=g.seq) g
+where p_point between g.gpoint_start and g.gpoint_end
+;
+
+---------------------------보정 후
+
+select p.user_num, p.p_point , g.grade
+from 
+  (select user_num , sum(decode(etc,'적립',point,-point)) as p_point from point_info
+    group by user_num) p , 
+   (select   seq,g.gpoint_start,g.grade ,nvl((select gpoint_start from grade_info where seq=g.seq+1),9999999999999)  as gpoint_end
+          from grade_info g) g
+where p_point between g.gpoint_start and g.gpoint_end
+;

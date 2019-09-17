@@ -1,0 +1,20 @@
+--ward, king의 경우엔 앞뒤 두 글자씩하면 
+별표시가 하나도 없기때문에 
+앞뒤 한 글자로 변경했습니다.
+select ename, 
+substr(ename,1,1) || 
+lpad('*',length(ename)-2,'*') 
+|| 
+substr(ename,length(ename),1) 
+from emp;
+
+--앞뒤 두글자로 변경하실경우엔 이렇게하시면됩니다.
+select ename, 
+substr(ename,1,2) ||
+lpad('*',length(ename)-4,'*') || 
+substr(ename,length(ename)-1,2) 
+from emp;
+--------------------------------------
+AB *** FG  7-4
+1000, 5, *   *1000
+*        3 *     ***
